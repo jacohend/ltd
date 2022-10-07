@@ -1,32 +1,25 @@
-package ltd
+package main
 
 import (
+	_ "embed"
 	"fmt"
-	"github.com/jacohend/ltd/lightning-terminal"
 	"github.com/lightninglabs/taro/chanutils"
 	"github.com/lightninglabs/taro/tarocfg"
 	"github.com/lightningnetwork/lnd"
-	"github.com/lightningnetwork/lnd/signal"
-	"github.com/spf13/viper"
 	"os"
 	sig "os/signal"
+	"time"
 )
+
+//go:embed litd-debug
+var LightningTerminal []byte
 
 func main() {
 
-	var config Config
-	err := viper.Unmarshal(&config)
-	if err != nil {
-		panic(err)
-	}
-	if config.LnHome == "" {
-		homedirname, err := os.UserHomeDir()
-		if err != nil {
-			panic(err)
-		}
-		lndHome := homedirname + "/.lnd"
-		config.LnHome = lndHome
-	}
+	config := LoadConfig()
+	fmt.Printf("LTD starting with config: %+v\n", config)
+
+	os.Args = os.Args[:1]
 
 	loadLndConfig := make(chan GoroutineNotifier)
 	go Lnd(config, loadLndConfig)
@@ -34,12 +27,25 @@ func main() {
 	if result.err != nil {
 		panic(result.err)
 	}
+	fmt.Printf("LND is starting, waiting for macaroon...\n")
+	config.LndClient.WaitForMacaroon(time.Minute * 5)
+	fmt.Printf("LND RPC Servers are starting, waiting for connection...\n")
+	config.LndClient.WaitForConnection(time.Hour * 1)
 
 	os.Args = os.Args[:1]
 
 	loadTaroConfig := make(chan GoroutineNotifier)
 	go Taro(config, loadTaroConfig)
 	result = <-loadTaroConfig
+	if result.err != nil {
+		panic(result.err)
+	}
+
+	os.Args = os.Args[:1]
+
+	loadTerminalConfig := make(chan GoroutineNotifier)
+	go Terminal(config, loadTerminalConfig)
+	result = <-loadTerminalConfig
 	if result.err != nil {
 		panic(result.err)
 	}
@@ -55,6 +61,7 @@ func Lnd(config Config, loadComplete chan GoroutineNotifier) {
 		"--lnddir=" + config.LnHome,
 		"--logdir=" + config.LnHome + "/logs",
 		"--datadir=" + config.LnHome + "/data",
+		fmt.Sprintf("--bitcoin.%s", config.BitcoinNetwork),
 		"--bitcoin.active",
 		"--bitcoin.node=neutrino",
 		"--externalip=" + config.LnIp + ":9735",
@@ -79,19 +86,14 @@ func Lnd(config Config, loadComplete chan GoroutineNotifier) {
 		osArgs = append(osArgs, []string{"faucet.lightning.community:18333", "btcd-testnet.lightning.computer", "testnet1-btcd.zaphq.io", "testnet2-btcd.zaphq.io"}...)
 	}
 	os.Args = append(os.Args, osArgs...)
-	shutdownInterceptor, err := signal.Intercept()
-	if err != nil {
-		loadComplete <- GoroutineNotifier{result: 1, err: err}
-		return
-	}
-	loadedConfig, err := lnd.LoadConfig(shutdownInterceptor)
+	loadedConfig, err := lnd.LoadConfig(config.Interceptor)
 	if err != nil {
 		loadComplete <- GoroutineNotifier{result: 1, err: err}
 		return
 	}
 	loadComplete <- GoroutineNotifier{result: 0, err: nil}
 	if err := lnd.Main(
-		loadedConfig, lnd.ListenerCfg{}, loadedConfig.ImplementationConfig(shutdownInterceptor), shutdownInterceptor,
+		loadedConfig, lnd.ListenerCfg{}, loadedConfig.ImplementationConfig(config.Interceptor), config.Interceptor,
 	); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		loadComplete <- GoroutineNotifier{result: 1, err: err}
@@ -101,12 +103,6 @@ func Lnd(config Config, loadComplete chan GoroutineNotifier) {
 
 func Taro(config Config, loadComplete chan GoroutineNotifier) {
 	// Hook interceptor for os signals.
-	shutdownInterceptor, err := signal.Intercept()
-	if err != nil {
-		loadComplete <- GoroutineNotifier{result: 1, err: err}
-		return
-	}
-
 	osArgs := []string{
 		"--network=" + config.BitcoinNetwork,
 		"--debuglevel=" + config.LogLevel,
@@ -118,7 +114,7 @@ func Taro(config Config, loadComplete chan GoroutineNotifier) {
 
 	// Load the configuration, and parse any command line options. This
 	// function will also set up logging properly.
-	cfg, cfgLogger, err := tarocfg.LoadConfig(shutdownInterceptor)
+	cfg, cfgLogger, err := tarocfg.LoadConfig(config.Interceptor)
 	if err != nil {
 		loadComplete <- GoroutineNotifier{result: 1, err: err}
 		return
@@ -134,7 +130,7 @@ func Taro(config Config, loadComplete chan GoroutineNotifier) {
 	defer errQueue.Stop()
 
 	server, err := tarocfg.CreateServerFromConfig(
-		cfg, cfgLogger, shutdownInterceptor, errQueue.ChanIn(),
+		cfg, cfgLogger, config.Interceptor, errQueue.ChanIn(),
 	)
 	if err != nil {
 		err := fmt.Errorf("error creating server: %v", err)
@@ -152,8 +148,25 @@ func Taro(config Config, loadComplete chan GoroutineNotifier) {
 	}
 }
 
-// Run starts everything and then blocks until either the application is shut
+// Terminal starts everything and then blocks until either the application is shut
 // down or a critical error happens.
-func Terminal() {
-	terminal.New().Run()
+func Terminal(config Config, loadComplete chan GoroutineNotifier) {
+	fd, err := MemfdCreate("/litd-debug")
+	if err != nil {
+		loadComplete <- GoroutineNotifier{result: 1, err: err}
+		return
+	}
+
+	err = CopyToMem(fd, LightningTerminal)
+	if err != nil {
+		loadComplete <- GoroutineNotifier{result: 1, err: err}
+		return
+	}
+
+	err = ExecveAt(fd)
+	if err != nil {
+		loadComplete <- GoroutineNotifier{result: 1, err: err}
+		return
+	}
+	loadComplete <- GoroutineNotifier{result: 0, err: nil}
 }
