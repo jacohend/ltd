@@ -3,10 +3,12 @@ module github.com/jacohend/ltd
 go 1.18
 
 require (
-	github.com/chainpoint/lightning-go v0.15.0-beta.0.20221007022015-93b1fae9998f
+	github.com/btcsuite/btcd v0.23.1
+	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
+	github.com/chainpoint/lightning-go v0.15.2
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/lightninglabs/taro v0.1.0-alpha
-	github.com/lightningnetwork/lnd v0.15.0-beta.rc6.0.20220825081330-cf9a9864cf25
+	github.com/lightningnetwork/lnd v0.15.0-beta.rc6.0.20221007130950-6ab6ba91bbe5
 )
 
 require (
@@ -17,16 +19,14 @@ require (
 	github.com/aead/siphash v1.0.1 // indirect
 	github.com/andybalholm/brotli v1.0.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/btcsuite/btcd v0.23.1 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.2.1 // indirect
 	github.com/btcsuite/btcd/btcutil v1.1.2 // indirect
 	github.com/btcsuite/btcd/btcutil/psbt v1.1.5 // indirect
 	github.com/btcsuite/btcd/chaincfg/chainhash v1.0.1 // indirect
-	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f // indirect
-	github.com/btcsuite/btcwallet v0.15.2-0.20220804001213-5aafe4789850 // indirect
-	github.com/btcsuite/btcwallet/wallet/txauthor v1.2.3 // indirect
+	github.com/btcsuite/btcwallet v0.16.1 // indirect
+	github.com/btcsuite/btcwallet/wallet/txauthor v1.3.2 // indirect
 	github.com/btcsuite/btcwallet/wallet/txrules v1.2.0 // indirect
-	github.com/btcsuite/btcwallet/wallet/txsizes v1.1.0 // indirect
+	github.com/btcsuite/btcwallet/wallet/txsizes v1.2.3 // indirect
 	github.com/btcsuite/btcwallet/walletdb v1.4.0 // indirect
 	github.com/btcsuite/btcwallet/wtxmgr v1.5.0 // indirect
 	github.com/btcsuite/go-socks v0.0.0-20170105172521-4720035b7bfd // indirect
@@ -90,7 +90,7 @@ require (
 	github.com/lightningnetwork/lnd/queue v1.1.0 // indirect
 	github.com/lightningnetwork/lnd/ticker v1.1.0 // indirect
 	github.com/lightningnetwork/lnd/tlv v1.0.3 // indirect
-	github.com/lightningnetwork/lnd/tor v1.0.2 // indirect
+	github.com/lightningnetwork/lnd/tor v1.1.0 // indirect
 	github.com/ltcsuite/ltcd v0.0.0-20190101042124-f37f8bf35796 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
@@ -172,3 +172,5 @@ require (
 	modernc.org/token v1.0.1 // indirect
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
+
+replace github.com/lightninglabs/taro v0.1.0-alpha => github.com/jacohend/taro v0.15.7
