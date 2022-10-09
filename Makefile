@@ -9,8 +9,8 @@ build-ui:
 
 .PHONY : build
 build:
-	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)"
+	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.RawTags=litd,autopilotrpc,signrpc,walletrpc,chainrpc,invoicesrpc,watchtowerrpc,neutrinorpc,peersrpc"
 
 .PHONY : install
 install:
-	GO111MODULE=on CGO_ENABLED=0 go install -tags "$(LND)"
+	GO111MODULE=on CGO_ENABLED=0 go install -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.RawTags=litd,autopilotrpc,signrpc,walletrpc,chainrpc,invoicesrpc,watchtowerrpc,neutrinorpc,peersrpc"
