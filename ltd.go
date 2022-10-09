@@ -107,6 +107,7 @@ func Terminal(config Config, loadComplete chan GoroutineNotifier) {
 	}
 	args := []string{
 		"--network=" + config.BitcoinNetwork,
+		"--enablerest",
 		"--lnd-mode=remote",
 		"--remote.lnd.rpcserver=" + "127.0.0.1:10009",
 		"--remote.lnd.macaroonpath=" + fmt.Sprintf("%s/data/chain/bitcoin/%s/admin.macaroon", config.LnHome, config.BitcoinNetwork),

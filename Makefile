@@ -1,4 +1,9 @@
 LND=dev autopilotrpc signrpc walletrpc chainrpc invoicesrpc watchtowerrpc neutrinorpc monitoring peersrpc kvdb_postgres kvdb_etcd
+comma=,
+noop=
+space=$(noop) $(noop)
+TAGS=$(subst $(space),$(comma),$(LND))
+VERSION=v0.15.99
 
 .PHONY : build-all
 build-all: build-ui build
@@ -9,8 +14,12 @@ build-ui:
 
 .PHONY : build
 build:
-	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.RawTags=litd,autopilotrpc,signrpc,walletrpc,chainrpc,invoicesrpc,watchtowerrpc,neutrinorpc,peersrpc"
+	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
 
 .PHONY : install
 install:
-	GO111MODULE=on CGO_ENABLED=0 go install -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.RawTags=litd,autopilotrpc,signrpc,walletrpc,chainrpc,invoicesrpc,watchtowerrpc,neutrinorpc,peersrpc"
+	GO111MODULE=on CGO_ENABLED=0 go install -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
+
+.PHONE : install-go
+install-go:
+	curl -L https://git.io/vQhTU | bash -s -- --version 1.18.7
