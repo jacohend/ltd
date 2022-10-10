@@ -18,13 +18,15 @@ make build-all && make install
 
 ## Usage
 
-`lncli` and `tarocli` required for wallet creation and interaction.
+`lncli` and `tarocli` required for wallet creation and interaction. 
+You can download these from the `lnd` and `taro` repositories.
 
+First run `ltd` in one shell: 
 ```bash
 ltd --network=testnet --uipassword=changethis --ip=127.0.0.1 --log_level=debug
 ```
 
-In another shell, create the wallet:
+Then open another shell and create the wallet with `lncli`:
 
 ```bash
 # create wallet. Be sure to save your passsword and seed phrase!
