@@ -37,6 +37,14 @@ build-dev:
 	go mod tidy && go mod vendor
 	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
 
+install-all: init-submodules install-lncli install-tarocli install
+
+install-tarocli:
+	cd taro && make install
+
+install-lncli:
+	cd lnd && make install
+
 .PHONY : install
 install:
 	GO111MODULE=on CGO_ENABLED=0 go install -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"

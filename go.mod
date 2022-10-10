@@ -173,4 +173,6 @@ require (
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
 
-replace github.com/lightninglabs/taro v0.1.0-alpha => github.com/jacohend/taro v0.15.9
+replace github.com/lightninglabs/taro v0.1.0-alpha => ./taro
+
+replace github.com/lightningnetwork/lnd v0.15.0-beta.rc6.0.20221010023403-406fc86f38a6 => ./lnd
