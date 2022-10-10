@@ -1,6 +1,6 @@
 # Lightning-Taro Daemon (ltd)
 
-Integrated Lnd and Taro daemon, with Terminal on the side. Basically Lightning Voltron.
+Integrated Lnd and Taro daemon, with Terminal on the side. Basically Lightning Voltron. Currently restricted to testnet mode. 
 
 ## Installation
 
