@@ -8,12 +8,15 @@ VERSION=v0.15.99
 .PHONY : build-all
 build-all: init-submodules build-ui build-lncli build-tarocli build
 
+.PHONY : build-tarocli
 build-tarocli:
 	cd taro && make build && cd .. && cp taro/tarocli-debug ./tarocli
 
+.PHONY : build-lncli
 build-lncli:
 	cd lnd && make build && cd .. && cp lnd/lncli-debug ./lncli
 
+.PHONY : init-submodules
 init-submodules:
 	git submodule update --init
 
@@ -37,11 +40,14 @@ build-dev:
 	go mod tidy && go mod vendor
 	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
 
+.PHONY : install-all
 install-all: init-submodules install-lncli install-tarocli install
 
+.PHONY : install-tarocli
 install-tarocli:
 	cd taro && make install
 
+.PHONY : install-lncli
 install-lncli:
 	cd lnd && make install
 
