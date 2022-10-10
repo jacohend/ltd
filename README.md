@@ -39,10 +39,10 @@ lncli --rpcserver 127.0.0.1:10009 --lnddir=~/.lnd --macaroonpath=~/.lnd/data/cha
 lncli --rpcserver 127.0.0.1:10009 --lnddir=~/.lnd --macaroonpath=~/.lnd/data/chain/bitcoin/testnet/admin.macaroon --tlscertpath=~/.lnd/tls.cert unlock
 ```
 
-You can interact with taro as well:
+You can interact with taro as well, such as minting new assets:
 
 ```bash
-tarocli assets mint --type=normal --name=waynechain --supply=2100000000000000 -- meta=wayne --enable_emission
+tarocli assets mint --type=normal --name=waynechain --supply=2100000000000000 --meta=wayne --enable_emission
 {
     "batch_key": "0385b55688b9170d2d4f613a5fa7fcb988ae0a0f6e61a7e72184e77236611b556e"
 }
