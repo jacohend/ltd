@@ -4,7 +4,7 @@ Integrated Lnd and Taro daemon, with Terminal on the side. Basically Lightning V
 
 ## Installation
 
-git, make, and go 1.18+ are required.
+git, make, nodejs/yarn, and go 1.18+ are required.
 
 ```bash
 git clone https://github.com/jacohend/ltd.git
