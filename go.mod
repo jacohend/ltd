@@ -8,7 +8,7 @@ require (
 	github.com/chainpoint/lightning-go v0.15.2
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/lightninglabs/taro v0.1.0-alpha
-	github.com/lightningnetwork/lnd v0.15.0-beta.rc6.0.20221007130950-6ab6ba91bbe5
+	github.com/lightningnetwork/lnd v0.15.0-beta.rc6.0.20221010023403-406fc86f38a6
 )
 
 require (
@@ -173,4 +173,4 @@ require (
 	sigs.k8s.io/yaml v1.2.0 // indirect
 )
 
-replace github.com/lightninglabs/taro v0.1.0-alpha => github.com/jacohend/taro v0.15.7
+replace github.com/lightninglabs/taro v0.1.0-alpha => github.com/jacohend/taro v0.15.9

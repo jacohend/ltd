@@ -6,7 +6,16 @@ TAGS=$(subst $(space),$(comma),$(LND))
 VERSION=v0.15.99
 
 .PHONY : build-all
-build-all: build-ui build
+build-all: init-submodules build-ui build-lncli build-tarocli build
+
+build-tarocli:
+	cd taro && make build && cd .. && cp taro/tarocli-debug ./tarocli
+
+build-lncli:
+	cd lnd && make build && cd .. && cp lnd/lncli-debug ./lncli
+
+init-submodules:
+	git submodule update --init
 
 .PHONY : build-ui
 build-ui:

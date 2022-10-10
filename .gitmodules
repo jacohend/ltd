@@ -1,3 +1,9 @@
 [submodule "lightning-terminal"]
 	path = lightning-terminal
 	url = https://github.com/lightninglabs/lightning-terminal
+[submodule "taro"]
+	path = taro
+	url = https://github.com/jacohend/taro.git
+[submodule "lnd"]
+	path = lnd
+	url = https://github.com/lightningnetwork/lnd
