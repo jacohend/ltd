@@ -16,6 +16,18 @@ build-ui:
 build:
 	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
 
+.PHONY : build-dev-all
+build-dev-all: build-ui-dev build-dev
+
+.PHONY : build-ui
+build-ui-dev:
+	cd lightning-terminal && go mod tidy && go mod vendor && make build && cd .. && cp lightning-terminal/litd-debug ./litd
+
+.PHONY : build
+build-dev:
+	go mod tidy && go mod vendor
+	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
+
 .PHONY : install
 install:
 	GO111MODULE=on CGO_ENABLED=0 go install -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
