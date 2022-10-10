@@ -19,7 +19,7 @@ make build-all
 ## Usage
 
 `lncli` and `tarocli` required for wallet creation and interaction. 
-You can download these from the `lnd` and `taro` repositories.
+The Makefile should build these binaries for you.
 
 First run `ltd` in one shell: 
 ```bash
