@@ -18,6 +18,7 @@ func main() {
 	config := LoadConfig()
 	fmt.Printf("LTD starting with config: %+v\n", config)
 
+	// Load LND or timeout and panic
 	loadLndConfig := make(chan GoroutineNotifier)
 	go Lnd(config, loadLndConfig)
 	select {
@@ -35,6 +36,7 @@ func main() {
 		fmt.Printf("LND is syncing...\n")
 	}
 
+	// Load Taro or timeout and panic
 	fmt.Printf("Taro is loading...\n")
 	loadTaroConfig := make(chan GoroutineNotifier)
 	go Taro(config, loadTaroConfig)
@@ -44,15 +46,17 @@ func main() {
 	}
 	fmt.Printf("Taro loaded.\n")
 
+	// Load terminal or
 	fmt.Printf("Terminal loading...\n")
 	loadTerminalConfig := make(chan GoroutineNotifier)
 	go Terminal(config, loadTerminalConfig)
 	result = <-loadTerminalConfig
 	if result.err != nil {
-		panic(result.err)
+		fmt.Printf("Terminal: error loading- %s\n", result.err.Error())
 	}
 	fmt.Printf("Terminal loaded.\n")
 
+	// Block at interrupt signal
 	done := make(chan os.Signal)
 	sig.Notify(done, os.Interrupt)
 	<-done
