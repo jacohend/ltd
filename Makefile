@@ -58,3 +58,26 @@ install:
 .PHONE : install-go
 install-go:
 	curl -L https://git.io/vQhTU | bash -s -- --version 1.18.7
+
+.PHONY : install-daemon
+install-daemon:
+	envsubst < ./config/ltd.service.template > ./config/ltd.service
+	sudo cp ./config/ltd.service /lib/systemd/system
+	sudo systemctl daemon-reload
+	sudo systemctl enable ltd
+
+.PHONY : start-daemon
+start-daemon:
+	sudo systemctl start ltd
+
+.PHONY : stop-daemon
+stop-daemon:
+	sudo systemctl stop ltd
+
+.PHONY : status-daemon
+status-daemon:
+	sudo systemctl status ltd
+
+.PHONY : log-daemon
+log-daemon:
+	journalctl --unit ltd --follow
