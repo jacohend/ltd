@@ -46,6 +46,9 @@ func LoadConfig() Config {
 	if config.BitcoinNetwork == "" {
 		config.BitcoinNetwork = "testnet"
 	}
+	if config.LogLevel == "" {
+		config.LogLevel = "warn"
+	}
 	taroConfig := tarocfg.DefaultConfig()
 	config.Taro = &taroConfig
 	lndConfig := lnd.DefaultConfig()
