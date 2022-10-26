@@ -61,10 +61,10 @@ install-go:
 
 .PHONY : install-daemon
 install-daemon:
-	envsubst < ./config/ltd.service.template > ./config/ltd.service
-	sudo cp ./config/ltd.service /lib/systemd/system
-	sudo systemctl daemon-reload
-	sudo systemctl enable ltd
+	@bash config/provision_service.sh
+	@sudo cp ./config/ltd.service /lib/systemd/system
+	@sudo systemctl daemon-reload
+	@sudo systemctl enable ltd
 
 .PHONY : start-daemon
 start-daemon:
