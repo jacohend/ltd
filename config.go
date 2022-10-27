@@ -78,6 +78,7 @@ func LoadConfig() Config {
 	config.Lnd.DebugLevel = config.LogLevel
 	config.Lnd.AcceptAMP = true
 	config.Lnd.AcceptKeySend = true
+	config.Taro.ChainConf.Network = config.BitcoinNetwork
 	switch config.BitcoinNetwork {
 	case "mainnet":
 		config.Lnd.Bitcoin.MainNet = true
@@ -95,6 +96,7 @@ func LoadConfig() Config {
 		config.Lnd.Bitcoin.SimNet = true
 		config.Lnd.ActiveNetParams = chainreg.BitcoinSimNetParams
 		config.Taro.ActiveNetParams = chaincfg.SimNetParams
+	default:
 	}
 	config.Taro.DebugLevel = config.LogLevel
 	config.Taro.Lnd = &tarocfg.LndConfig{
