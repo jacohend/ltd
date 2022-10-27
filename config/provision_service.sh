@@ -1,5 +1,6 @@
 #!/bin/bash
-echo "Please Enter Network: " && (read NETWORK || exit)
+echo "Please Enter Network: "
+read NETWORK || exit
 export NETWORK=${NETWORK:-testnet}
 echo "Please Enter Terminal Password: "
 read PASS || exit
