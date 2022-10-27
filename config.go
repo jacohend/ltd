@@ -49,6 +49,9 @@ func LoadConfig() Config {
 	if config.LogLevel == "" {
 		config.LogLevel = "warn"
 	}
+	if config.LnDomain == "" {
+		config.LnDomain = "lightning.tabulon.io"
+	}
 	taroConfig := tarocfg.DefaultConfig()
 	config.Taro = &taroConfig
 	lndConfig := lnd.DefaultConfig()

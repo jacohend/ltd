@@ -113,6 +113,7 @@ func Terminal(config Config, loadComplete chan GoroutineNotifier) {
 		"--network=" + config.BitcoinNetwork,
 		"--enablerest",
 		"--lnd-mode=remote",
+		"--insecure-httpslisten=" + "127.0.0.1:8443", //secure with cloudflare
 		"--remote.lnd.rpcserver=" + "127.0.0.1:10009",
 		"--remote.lnd.macaroonpath=" + fmt.Sprintf("%s/data/chain/bitcoin/%s/admin.macaroon", config.LnHome, config.BitcoinNetwork),
 		"--remote.lnd.tlscertpath=" + fmt.Sprintf("%s/tls.cert", config.LnHome),
