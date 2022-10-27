@@ -71,7 +71,7 @@ func LoadConfig() Config {
 	config.Lnd.Bitcoin.Active = true
 	config.Lnd.Bitcoin.Node = "neutrino"
 	config.Lnd.RawExternalIPs = []string{config.LnIp + ":9735"}
-	config.Lnd.ExternalHosts = []string{config.LnDomain + ":9735"}
+	config.Lnd.ExternalHosts = []string{config.LnDomain, "lnd"}
 	config.Lnd.RawListeners = []string{"0.0.0.0:9735"}
 	config.Lnd.RawRESTListeners = []string{"0.0.0.0:8080"}
 	config.Lnd.RawRPCListeners = []string{"0.0.0.0:10009"}
