@@ -25,6 +25,7 @@ type Config struct {
 	Lnd            *lnd.Config     `group:"lnd" namespace:"lnd"`
 	Taro           *tarocfg.Config `group:"taro" namespace:"taro"`
 	Logger         btclog.Logger
+	Hosted         bool `long:"hosted" description:"whether this is hosted externally or via forward proxy"`
 }
 
 type GoroutineNotifier struct {

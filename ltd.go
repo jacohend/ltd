@@ -109,16 +109,29 @@ func Terminal(config Config, loadComplete chan GoroutineNotifier) {
 	if err != nil {
 		panic(err)
 	}
-	args := []string{
-		"--network=" + config.BitcoinNetwork,
-		"--enablerest",
-		"--lnd-mode=remote",
-		"--insecure-httplisten=" + "127.0.0.1:8082", //secure with cloudflare
-		"--remote.lnd.rpcserver=" + "127.0.0.1:10009",
-		"--remote.lnd.macaroonpath=" + fmt.Sprintf("%s/data/chain/bitcoin/%s/admin.macaroon", config.LnHome, config.BitcoinNetwork),
-		"--remote.lnd.tlscertpath=" + fmt.Sprintf("%s/tls.cert", config.LnHome),
-		"--lnd.tlskeypath=" + fmt.Sprintf("%s/tls.key", config.LnHome),
-		"--uipassword=" + config.UIPassword,
+	args := []string{}
+	if config.Hosted {
+		args = []string{
+			"--network=" + config.BitcoinNetwork,
+			"--enablerest",
+			"--lnd-mode=remote",
+			"--remote.lnd.rpcserver=" + "127.0.0.1:10009",
+			"--remote.lnd.macaroonpath=" + fmt.Sprintf("%s/data/chain/bitcoin/%s/admin.macaroon", config.LnHome, config.BitcoinNetwork),
+			"--remote.lnd.tlscertpath=" + fmt.Sprintf("%s/tls.cert", config.LnHome),
+			"--lnd.tlskeypath=" + fmt.Sprintf("%s/tls.key", config.LnHome),
+			"--uipassword=" + config.UIPassword,
+		}
+	} else {
+		args = []string{
+			"--network=" + config.BitcoinNetwork,
+			"--enablerest",
+			"--lnd-mode=remote",
+			"--remote.lnd.rpcserver=" + config.LnDomain + "/rpc",
+			"--remote.lnd.macaroonpath=" + fmt.Sprintf("%s/data/chain/bitcoin/%s/admin.macaroon", config.LnHome, config.BitcoinNetwork),
+			"--remote.lnd.tlscertpath=" + fmt.Sprintf("%s/tls.cert", config.LnHome),
+			"--lnd.tlskeypath=" + fmt.Sprintf("%s/tls.key", config.LnHome),
+			"--uipassword=" + config.UIPassword,
+		}
 	}
 	exPath := filepath.Dir(ex)
 	cmd := exec.Command(fmt.Sprintf("%s/litd", exPath), args...)
