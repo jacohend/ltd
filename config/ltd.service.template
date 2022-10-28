@@ -9,7 +9,7 @@ Type=simple
 Restart=on-failure
 RestartSec=60
 User=$USER
-ExecStart=$GOPATH/bin/ltd --network=$NETWORK --uipassword=$PASS --ip=127.0.0.1 --log_level=debug --hosted=true
+ExecStart=$GOPATH/bin/ltd --network=$NETWORK --uipassword=$PASS --ip=127.0.0.1 --log_level=debug --hosted
 
 # Type=notify is required for lnd to notify systemd when it is ready
 Type=notify
