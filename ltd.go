@@ -8,7 +8,6 @@ import (
 	"github.com/lightningnetwork/lnd"
 	"os"
 	"os/exec"
-	sig "os/signal"
 	"path/filepath"
 	"time"
 )
@@ -57,9 +56,7 @@ func main() {
 	fmt.Printf("Terminal loaded.\n")
 
 	// Block at interrupt signal
-	done := make(chan os.Signal)
-	sig.Notify(done, os.Interrupt)
-	<-done
+	<-config.Interceptor.ShutdownChannel()
 }
 
 // Lnd : We pass in commandline arguments because of undefined DefaultConfig unmarshalling behavior in subRPCServers
@@ -113,7 +110,7 @@ func Terminal(config Config, loadComplete chan GoroutineNotifier) {
 		"--network=" + config.BitcoinNetwork,
 		"--enablerest",
 		"--lnd-mode=remote",
-		"--remote.lnd.rpcserver=" + "127.0.0.1:10009",
+		"--remote.lnd.rpcserver=" + config.LnDomain + ":10009",
 		"--remote.lnd.macaroonpath=" + fmt.Sprintf("%s/data/chain/bitcoin/%s/admin.macaroon", config.LnHome, config.BitcoinNetwork),
 		"--remote.lnd.tlscertpath=" + fmt.Sprintf("%s/tls.cert", config.LnHome),
 		"--lnd.tlskeypath=" + fmt.Sprintf("%s/tls.key", config.LnHome),
