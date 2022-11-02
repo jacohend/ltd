@@ -10,11 +10,11 @@ build-all: init-submodules build-ui build-lncli build-tarocli build
 
 .PHONY : build-tarocli
 build-tarocli:
-	cd taro && make build && cd .. && cp taro/tarocli-debug ./tarocli
+	cd taro && make build tags="$(LND)" && cd .. && cp taro/tarocli-debug ./tarocli
 
 .PHONY : build-lncli
 build-lncli:
-	cd lnd && make build && cd .. && cp lnd/lncli-debug ./lncli
+	cd lnd && make build tags="$(LND)" && cd .. && cp lnd/lncli-debug ./lncli
 
 .PHONY : init-submodules
 init-submodules:
@@ -22,7 +22,7 @@ init-submodules:
 
 .PHONY : build-ui
 build-ui:
-	cd lightning-terminal && make build && cd .. && cp lightning-terminal/litd-debug ./litd
+	cd lightning-terminal && make build tags="$(LND)" && cd .. && cp lightning-terminal/litd-debug ./litd
 
 .PHONY : build
 build:
@@ -33,7 +33,7 @@ build-dev-all: build-ui-dev build-dev
 
 .PHONY : build-ui
 build-ui-dev:
-	cd lightning-terminal && go mod tidy && go mod vendor && make build && cd .. && cp lightning-terminal/litd-debug ./litd
+	cd lightning-terminal && go mod tidy && go mod vendor && make build tags="$(LND)" && cd .. && cp lightning-terminal/litd-debug ./litd
 
 .PHONY : build
 build-dev:
@@ -45,11 +45,11 @@ install-all: init-submodules install-lncli install-tarocli install
 
 .PHONY : install-tarocli
 install-tarocli:
-	cd taro && make install
+	cd taro && make install tags="$(LND)"
 
 .PHONY : install-lncli
 install-lncli:
-	cd lnd && make install
+	cd lnd && make install tags="$(LND)"
 
 .PHONY : install
 install:
