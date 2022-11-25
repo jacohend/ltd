@@ -41,7 +41,10 @@ build-dev:
 	GO111MODULE=on CGO_ENABLED=0 go build -tags "$(LND)" -ldflags " -X github.com/lightningnetwork/lnd/build.Commit=$(VERSION) -X github.com/lightningnetwork/lnd/build.RawTags=$(TAGS)"
 
 .PHONY : install-all
-install-all: init-submodules install-lncli install-tarocli install
+install-all: init-submodules install-lncli install-tarocli install install-daemon
+
+.PHONY : update
+update: stop-daemon install-all start-daemon
 
 .PHONY : install-tarocli
 install-tarocli:
