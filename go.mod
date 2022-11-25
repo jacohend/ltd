@@ -3,7 +3,7 @@ module github.com/jacohend/ltd
 go 1.18
 
 require (
-	github.com/btcsuite/btcd v0.23.2
+	github.com/btcsuite/btcd v0.23.4
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f
 	github.com/chainpoint/lightning-go v0.15.2
 	github.com/jessevdk/go-flags v1.4.0
